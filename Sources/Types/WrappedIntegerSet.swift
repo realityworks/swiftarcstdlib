@@ -13,7 +13,7 @@ public struct WrappedIntegerSet<Element: BinaryInteger> {
     var maximum: Element
     private var setOfValid: Set<Element>
 
-    init(
+    public init(
         start: Element,
         end: Element,
         maximum: Element
@@ -24,7 +24,7 @@ public struct WrappedIntegerSet<Element: BinaryInteger> {
         self.setOfValid = .wrapped(start: start, end: end, maximum: maximum)
     }
 
-    func isInWrappedRange(_ element: Element) -> Bool {
+    public func isInWrappedRange(_ element: Element) -> Bool {
         setOfValid.contains(element)
     }
 }
