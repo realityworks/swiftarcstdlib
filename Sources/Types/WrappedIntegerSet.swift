@@ -31,9 +31,9 @@ public struct WrappedIntegerSet<Element: BinaryInteger> {
         self.openClosed = openClosed
 
         if openClosed == .closed {
-            self.setOfValid = .openWrapped(start: start, end: end, maximum: maximum)
-        } else {
             self.setOfValid = .closedWrapped(start: start, end: end, maximum: maximum)
+        } else {
+            self.setOfValid = .openWrapped(start: start, end: end, maximum: maximum)
         }
     }
 
