@@ -16,7 +16,14 @@ public extension Set {
 
 // MARK: Wrapped Set
 public extension Set where Element: BinaryInteger {
-    static func wrapped(start: Element, end: Element, maximum: Element) -> Set<Element> {
+    static func openWrapped(start: Element, end: Element, maximum: Element) -> Set<Element> {
+        var setOf = closedWrapped(start: start, end: end, maximum: maximum)
+        setOf.remove(start)
+        setOf.remove(end)
+        return setOf
+    }
+
+    static func closedWrapped(start: Element, end: Element, maximum: Element) -> Set<Element> {
         var setOf: Self = .init()
 
         var value = start

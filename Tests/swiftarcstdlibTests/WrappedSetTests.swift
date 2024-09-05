@@ -33,14 +33,14 @@ final class WrappedSetTests: XCTestCase {
     }
 
     func testNonWrappedValueInSet() throws {
-        let setOf = Set<Int>.wrapped(start: 5, end: 10, maximum: 100)
+        let setOf = Set<Int>.closedWrapped(start: 5, end: 10, maximum: 100)
         XCTAssertEqual(setOf.contains(5), true)
         XCTAssertEqual(setOf.contains(10), true)
         XCTAssertEqual(setOf.contains(11), false)
     }
 
     func testWrappedValueInSet() throws {
-        let setOf = Set<Int>.wrapped(start: 50, end: 10, maximum: 80)
+        let setOf = Set<Int>.closedWrapped(start: 50, end: 10, maximum: 80)
         XCTAssertEqual(setOf.contains(20), false)
         XCTAssertEqual(setOf.contains(70), true)
         XCTAssertEqual(setOf.contains(5), true)
@@ -48,5 +48,26 @@ final class WrappedSetTests: XCTestCase {
         XCTAssertEqual(setOf.contains(10), true)
         XCTAssertEqual(setOf.contains(11), false)
         XCTAssertEqual(setOf.contains(50), true)
+    }
+
+    func testOpenWrappedValueInSet() throws {
+        let setOf = Set<Int>.openWrapped(start: 50, end: 10, maximum: 80)
+        XCTAssertEqual(setOf.contains(10), false)
+        XCTAssertEqual(setOf.contains(50), false)
+    }
+
+    func testEqualOpenWrappedValueInSet() throws {
+        let setOf = Set<Int>.openWrapped(start: 50, end: 50, maximum: 80)
+        XCTAssertEqual(setOf.contains(50), false)
+        XCTAssertEqual(setOf.contains(51), true)
+        XCTAssertEqual(setOf.contains(49), true)
+    }
+
+    func testEmptyOpenWrappedValueInSet() throws {
+        let setOf = Set<Int>.openWrapped(start: 50, end: 51, maximum: 80)
+        XCTAssertEqual(setOf.contains(50), false)
+        XCTAssertEqual(setOf.contains(51), false)
+        XCTAssertEqual(setOf.contains(49), false)
+        XCTAssertEqual(setOf.contains(52), false)
     }
 }
