@@ -12,74 +12,66 @@ public enum OpenClosedSet {
     case closed
 }
 
-public struct WrappedIntegerSet<Element: BinaryInteger> {
-    var start: Element
-    var end: Element
-    var maximum: Element
-    private var setOfValid: Set<Element>
+public protocol WrappedIntegerSet {
+    associatedtype Element: BinaryInteger
+    var start: Element { get set }
+    var end: Element { get set }
+    var maximum: Element { get set }
+    var setOfValid: Set<Element> { get set }
+    var openClosed: OpenClosedSet { get set }
+    func isInWrappedRange(_ element: Element) -> Bool
+}
+
+public extension WrappedIntegerSet {
+    func isInWrappedRange(_ element: Element) -> Bool {
+        setOfValid.contains(element)
+    }
+}
+
+public struct OpenWrappedIntegerSet<Element: BinaryInteger>: WrappedIntegerSet {
+    public var start: Element
+    public var end: Element
+    public var maximum: Element
+    public var setOfValid: Set<Element>
     public var openClosed: OpenClosedSet
 
     public init(
         start: Element,
         end: Element,
-        maximum: Element,
-        openClosed: OpenClosedSet
+        maximum: Element
     ) {
         self.start = start
         self.end = end
         self.maximum = maximum
-        self.openClosed = openClosed
-
-        if openClosed == .closed {
-            self.setOfValid = .closedWrapped(start: start, end: end, maximum: maximum)
-        } else {
-            self.setOfValid = .openWrapped(start: start, end: end, maximum: maximum)
-        }
-    }
-
-    public func isInWrappedRange(_ element: Element) -> Bool {
-        setOfValid.contains(element)
+        self.openClosed = .open
+        self.setOfValid = .openWrapped(
+            start: start,
+            end: end,
+            maximum: maximum
+        )
     }
 }
 
-public struct OpenWrappedIntegerSet<Element: BinaryInteger> {
-    var wrappedIntegerSet: WrappedIntegerSet<Element>
+public struct ClosedWrappedIntegerSet<Element: BinaryInteger>: WrappedIntegerSet {
+    public var start: Element
+    public var end: Element
+    public var maximum: Element
+    public var setOfValid: Set<Element>
+    public var openClosed: OpenClosedSet
 
     public init(
         start: Element,
         end: Element,
         maximum: Element
     ) {
-        self.wrappedIntegerSet = .init(
+        self.start = start
+        self.end = end
+        self.maximum = maximum
+        self.openClosed = .closed
+        self.setOfValid = .closedWrapped(
             start: start,
             end: end,
-            maximum: maximum,
-            openClosed: .open
+            maximum: maximum
         )
-    }
-
-    public func isInWrappedRange(_ element: Element) -> Bool {
-        wrappedIntegerSet.isInWrappedRange(element)
-    }
-}
-
-public struct ClosedWrappedIntegerSet<Element: BinaryInteger> {
-    var wrappedIntegerSet: WrappedIntegerSet<Element>
-
-    public init(
-        start: Element,
-        end: Element,
-        maximum: Element
-    ) {
-        self.wrappedIntegerSet = .init(
-            start: start,
-            end: end,
-            maximum: maximum,
-            openClosed: .closed
-        )
-    }
-
-    public func isInWrappedRange(_ element: Element) -> Bool {
-        wrappedIntegerSet.isInWrappedRange(element)
     }
 }
