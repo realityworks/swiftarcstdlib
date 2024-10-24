@@ -12,7 +12,7 @@ public enum OpenClosedSet {
     case closed
 }
 
-protocol WrappedIntegerSet {
+public protocol WrappedIntegerSet {
     associatedtype Element: BinaryInteger
     var start: Element { get set }
     var end: Element { get set }
@@ -21,18 +21,18 @@ protocol WrappedIntegerSet {
     var openClosed: OpenClosedSet { get set }
 }
 
-extension WrappedIntegerSet {
-    public func isInWrappedRange(_ element: Element) -> Bool {
+public extension WrappedIntegerSet {
+    func isInWrappedRange(_ element: Element) -> Bool {
         setOfValid.contains(element)
     }
 }
 
 public struct OpenWrappedIntegerSet<Element: BinaryInteger>: WrappedIntegerSet {
-    var start: Element
-    var end: Element
-    var maximum: Element
-    var setOfValid: Set<Element>
-    var openClosed: OpenClosedSet
+    public var start: Element
+    public var end: Element
+    public var maximum: Element
+    public var setOfValid: Set<Element>
+    public var openClosed: OpenClosedSet
 
     public init(
         start: Element,
@@ -52,11 +52,11 @@ public struct OpenWrappedIntegerSet<Element: BinaryInteger>: WrappedIntegerSet {
 }
 
 public struct ClosedWrappedIntegerSet<Element: BinaryInteger>: WrappedIntegerSet {
-    var start: Element
-    var end: Element
-    var maximum: Element
-    var setOfValid: Set<Element>
-    var openClosed: OpenClosedSet
+    public var start: Element
+    public var end: Element
+    public var maximum: Element
+    public var setOfValid: Set<Element>
+    public var openClosed: OpenClosedSet
 
     public init(
         start: Element,
