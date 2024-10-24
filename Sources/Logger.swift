@@ -58,13 +58,14 @@ public struct Logger {
         Logger.log(level: .verbose, topic: topic, message: message)
     }
 
+    public static func printing(logLevel: Log.Level, isEnabled enabled: Bool) {
+        printLogLevelEnabled[logLevel] = enabled
+    }
+
+    private static var printLogLevelEnabled: [Log.Level: Bool] = [:]
+
     private static func shouldPrintLog(for level: Log.Level) -> Bool {
-        switch level {
-        case .error: return true
-        case .info: return true
-        case .verbose: return true
-        case .warning: return true
-        }
+        return printLogLevelEnabled[level] ?? false
     }
 }
 

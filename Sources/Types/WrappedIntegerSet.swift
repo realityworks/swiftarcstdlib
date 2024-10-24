@@ -78,4 +78,8 @@ public struct ClosedWrappedIntegerSet<Element: BinaryInteger> {
             openClosed: .closed
         )
     }
+
+    public func isInWrappedRange(_ element: Element) -> Bool {
+        wrappedIntegerSet.isInWrappedRange(element)
+    }
 }
