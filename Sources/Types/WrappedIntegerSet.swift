@@ -40,6 +40,10 @@ public struct WrappedIntegerSet<Element: BinaryInteger> {
     public func isInWrappedRange(_ element: Element) -> Bool {
         setOfValid.contains(element)
     }
+
+    public func overlaps(_ integerSet: WrappedIntegerSet<Element>) -> Bool {
+        return !setOfValid.union(integerSet.setOfValid).isEmpty
+    }
 }
 
 public struct OpenWrappedIntegerSet<Element: BinaryInteger> {
@@ -61,6 +65,14 @@ public struct OpenWrappedIntegerSet<Element: BinaryInteger> {
     public func isInWrappedRange(_ element: Element) -> Bool {
         wrappedIntegerSet.isInWrappedRange(element)
     }
+
+    public func overlaps(
+        _ openIntegerSet: OpenWrappedIntegerSet<Element>
+    ) -> Bool {
+        return wrappedIntegerSet.overlaps(
+            openIntegerSet.wrappedIntegerSet
+        )
+    }
 }
 
 public struct ClosedWrappedIntegerSet<Element: BinaryInteger> {
@@ -81,5 +93,11 @@ public struct ClosedWrappedIntegerSet<Element: BinaryInteger> {
 
     public func isInWrappedRange(_ element: Element) -> Bool {
         wrappedIntegerSet.isInWrappedRange(element)
+    }
+
+    public func overlaps(_ closedIntegerSet: ClosedWrappedIntegerSet) -> Bool {
+        return wrappedIntegerSet.overlaps(
+            closedIntegerSet.wrappedIntegerSet
+        )
     }
 }
