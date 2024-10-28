@@ -62,7 +62,11 @@ public struct Logger {
         printLogLevelEnabled[logLevel] = enabled
     }
 
-    private static var printLogLevelEnabled: [Log.Level: Bool] = [:]
+    private static var printLogLevelEnabled: [Log.Level: Bool] = [
+        .error: true,
+        .warning: true,
+        .info: true
+    ]
 
     private static func shouldPrintLog(for level: Log.Level) -> Bool {
         return printLogLevelEnabled[level] ?? false
