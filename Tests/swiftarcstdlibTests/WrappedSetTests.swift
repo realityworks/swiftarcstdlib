@@ -6,6 +6,7 @@
 //
 
 import XCTest
+@testable import swiftarcstdlib
 
 final class WrappedSetTests: XCTestCase {
 
@@ -69,5 +70,35 @@ final class WrappedSetTests: XCTestCase {
         XCTAssertEqual(setOf.contains(51), false)
         XCTAssertEqual(setOf.contains(49), false)
         XCTAssertEqual(setOf.contains(52), false)
+    }
+
+    func testClosedOverlapping() throws {
+        let integerSetA = ClosedWrappedIntegerSet(start: 10, end: 40, maximum: 80)
+        let integerSetB = ClosedWrappedIntegerSet(start: 20, end: 60, maximum: 80)
+        XCTAssertTrue(integerSetA.overlaps(integerSetB))
+    }
+
+    func testClosedWrappedOverlapping() throws {
+        let integerSetA = ClosedWrappedIntegerSet(start: 70, end: 5, maximum: 80)
+        let integerSetB = ClosedWrappedIntegerSet(start: 60, end: 75, maximum: 80)
+        XCTAssertTrue(integerSetA.overlaps(integerSetB))
+    }
+
+    func testClosedNonOverlapping() throws {
+        let integerSetA = ClosedWrappedIntegerSet(start: 30, end: 40, maximum: 80)
+        let integerSetB = ClosedWrappedIntegerSet(start: 50, end: 60, maximum: 80)
+        XCTAssertFalse(integerSetA.overlaps(integerSetB))
+    }
+
+    func testClosedWrappedNonOverlapping() throws {
+        let integerSetA = ClosedWrappedIntegerSet(start: 70, end: 5, maximum: 80)
+        let integerSetB = ClosedWrappedIntegerSet(start: 6, end: 60, maximum: 80)
+        XCTAssertFalse(integerSetA.overlaps(integerSetB))
+    }
+
+    func testOpenNonOverlapping() throws {
+        let integerSetA = OpenWrappedIntegerSet(start: 30, end: 40, maximum: 80)
+        let integerSetB = OpenWrappedIntegerSet(start: 20, end: 30, maximum: 80)
+        XCTAssertFalse(integerSetA.overlaps(integerSetB))
     }
 }

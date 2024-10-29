@@ -42,7 +42,8 @@ public struct WrappedIntegerSet<Element: BinaryInteger> {
     }
 
     public func overlaps(_ integerSet: WrappedIntegerSet<Element>) -> Bool {
-        return !setOfValid.union(integerSet.setOfValid).isEmpty
+        let intersection = setOfValid.intersection(integerSet.setOfValid)
+        return !intersection.isEmpty
     }
 }
 
