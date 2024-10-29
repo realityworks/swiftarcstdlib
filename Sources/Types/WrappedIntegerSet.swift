@@ -13,9 +13,9 @@ public enum OpenClosedSet {
 }
 
 public struct WrappedIntegerSet<Element: BinaryInteger> {
-    var start: Element
-    var end: Element
-    var maximum: Element
+    public var start: Element
+    public var end: Element
+    public var maximum: Element
     private var setOfValid: Set<Element>
     public var openClosed: OpenClosedSet
 
