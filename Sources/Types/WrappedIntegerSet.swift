@@ -15,7 +15,7 @@ public enum OpenClosedSet {
 public struct WrappedIntegerSet<Element: BinaryInteger> {
     public var start: Element
     public var end: Element
-    public var maximum: Element
+    public 	var maximum: Element
     private var setOfValid: Set<Element>
     public var openClosed: OpenClosedSet
 
@@ -45,10 +45,26 @@ public struct WrappedIntegerSet<Element: BinaryInteger> {
         let intersection = setOfValid.intersection(integerSet.setOfValid)
         return !intersection.isEmpty
     }
+
+    public var unwrappedRange: ClosedRange<Element> {
+        var endUnwrapped = end
+        var startUnwrapped = start
+
+        if end < start {
+            endUnwrapped += maximum
+        }
+
+        if openClosed == .open {
+            endUnwrapped -= 1
+            startUnwrapped += 1
+        }
+
+        return startUnwrapped...endUnwrapped
+    }
 }
 
 public struct OpenWrappedIntegerSet<Element: BinaryInteger> {
-    var wrappedIntegerSet: WrappedIntegerSet<Element>
+    public var wrappedIntegerSet: WrappedIntegerSet<Element>
 
     public init(
         start: Element,
@@ -77,7 +93,7 @@ public struct OpenWrappedIntegerSet<Element: BinaryInteger> {
 }
 
 public struct ClosedWrappedIntegerSet<Element: BinaryInteger> {
-    var wrappedIntegerSet: WrappedIntegerSet<Element>
+    public var wrappedIntegerSet: WrappedIntegerSet<Element>
 
     public init(
         start: Element,
