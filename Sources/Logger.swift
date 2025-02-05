@@ -9,8 +9,10 @@ enum LoggerError: Error {
 }
 
 public struct Logger {
+    static var maxLogLength: Int = 50_000
     static var crashOnDebugLogLevels: Set<Log.Level> = []
     static var reportableLogLevels: Set<Log.Level> = [.error]
+    //public static var logQueue:
     public static var logEntries: [Log] = []
     static let queue = DispatchQueue(label: "thread-safe-logger", attributes: .concurrent)
 
@@ -39,6 +41,10 @@ public struct Logger {
         queue.sync(flags: .barrier) {
             // perform writes on data
             logEntries.append(log)
+
+            while logEntries.count > Self.maxLogLength {
+                logEntries.removeFirst()
+            }
         }
     }
 
@@ -76,7 +82,13 @@ public struct Logger {
 // MARK: - Log
 
 public struct Log {
-    static let dateFormatter = DateFormatter()
+    static let dateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd-MM HH:mm:ss.SSS"
+        dateFormatter.dateStyle = .short
+        dateFormatter.timeStyle = .short
+        return dateFormatter
+    }()
 
     let timestamp: Date = Date()
     let level: Level
@@ -84,13 +96,6 @@ public struct Log {
     let message: String
 
     public var output: String {
-        Log.dateFormatter.dateFormat = "dd-MM-yy HH:mm:ss.SSS"
-        let date = Log.dateFormatter.string(from: timestamp)
-        return "LOGGER: [\(date)] [\(level.rawValue)] \(topic.rawValue): \(message)"
-    }
-
-    public var outputShort: String {
-        Log.dateFormatter.dateFormat = "HH:mm:ss"
         let date = Log.dateFormatter.string(from: timestamp)
         return "LOG: [\(date)] [\(level.rawValue)] \(topic.rawValue): \(message)"
     }
