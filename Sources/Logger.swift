@@ -47,26 +47,20 @@ public struct Logger {
             }
         }
     }
-
-    public static var dateStyle: DateFormatter.Style = .short {
-        didSet {
-            dateFormatter.dateStyle = dateStyle
-        }
-    }
     
-    public static var timeStyle: DateFormatter.Style = .short {
-        didSet {
-            dateFormatter.timeStyle = timeStyle
-        }
-    }
-    
-    fileprivate static var dateFormatter: DateFormatter = {
+    public static let shortFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd-MM HH:mm:ss.SSS"
-        dateFormatter.dateStyle = dateStyle
-        dateFormatter.timeStyle = timeStyle
+        dateFormatter.dateFormat = "dd-MM HH:mm"
         return dateFormatter
     }()
+    
+    public static let longFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd-MM HH:mm:ss.SSS"
+        return dateFormatter
+    }()
+    
+    public static var dateFormatter: DateFormatter = shortFormatter
 
     public static func error(topic: Log.Topic, message: String) {
         Logger.log(level: .error, topic: topic, message: message)
