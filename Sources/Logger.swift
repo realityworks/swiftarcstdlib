@@ -47,13 +47,24 @@ public struct Logger {
             }
         }
     }
+
+    public static var dateStyle: DateFormatter.Style = .short {
+        didSet {
+            dateFormatter.dateStyle = dateStyle
+        }
+    }
     
-    public static var dateFormat: DateFormatter.Style = .short
-    static let dateFormatter: DateFormatter = {
+    public static var timeStyle: DateFormatter.Style = .short {
+        didSet {
+            dateFormatter.timeStyle = timeStyle
+        }
+    }
+    
+    fileprivate static var dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd-MM HH:mm:ss.SSS"
-        dateFormatter.dateStyle = dateFormat
-        dateFormatter.timeStyle = dateFormat
+        dateFormatter.dateStyle = dateStyle
+        dateFormatter.timeStyle = timeStyle
         return dateFormatter
     }()
 
