@@ -8,7 +8,7 @@
 import Foundation
 import zlib
 
-extension Data {
+public extension Data {
     var crc32: UInt32 {
         self.withUnsafeBytes { buffer in
             let crc = zlib.crc32(0, buffer.bindMemory(to: Bytef.self).baseAddress, uInt(buffer.count))
