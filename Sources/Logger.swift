@@ -47,6 +47,20 @@ public struct Logger {
             }
         }
     }
+    
+    public static let shortFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd-MM HH:mm"
+        return dateFormatter
+    }()
+    
+    public static let longFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd-MM HH:mm:ss.SSS"
+        return dateFormatter
+    }()
+    
+    public static var dateFormatter: DateFormatter = shortFormatter
 
     public static func error(topic: Log.Topic, message: String) {
         Logger.log(level: .error, topic: topic, message: message)
@@ -82,21 +96,13 @@ public struct Logger {
 // MARK: - Log
 
 public struct Log {
-    static let dateFormatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd-MM HH:mm:ss.SSS"
-        dateFormatter.dateStyle = .short
-        dateFormatter.timeStyle = .short
-        return dateFormatter
-    }()
-
     let timestamp: Date = Date()
     let level: Level
     let topic: Topic
     let message: String
 
     public var output: String {
-        let date = Log.dateFormatter.string(from: timestamp)
+        let date = Logger.dateFormatter.string(from: timestamp)
         return "LOG: [\(date)] [\(level.rawValue)] \(topic.rawValue): \(message)"
     }
 
