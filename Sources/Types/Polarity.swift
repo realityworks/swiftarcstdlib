@@ -11,11 +11,11 @@ public enum Polarity: UInt8, Storable {
     case negative = 0x00
     case positive = 0x01
 
-    mutating func toggle() {
+    public mutating func toggle() {
        self = self == .positive ? .negative : .positive
     }
 
-    static func random() -> Polarity {
+    public static func random() -> Polarity {
         return Bool.random() ? .negative : .positive
     }
 }
