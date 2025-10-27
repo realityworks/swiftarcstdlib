@@ -9,19 +9,19 @@ extension TimeInterval {
         self * 1_000_000_000
     }
 
-    static var week: TimeInterval {
+    public static var week: TimeInterval {
         day * 7
     }
     
-    static var day: TimeInterval {
+    public static var day: TimeInterval {
         hour * 24
     }
     
-    static var hour: TimeInterval {
+    public static var hour: TimeInterval {
         minute * 60
     }
     
-    static var minute: TimeInterval {
+    public static var minute: TimeInterval {
         60
     }
 }
