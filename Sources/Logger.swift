@@ -9,11 +9,12 @@ enum LoggerError: Error {
 }
 
 public struct Logger {
-    static var maxLogLength: Int = 50_000
+    public static var logEntries: [Log] = []
+    
+    static var maxLogLines: Int = 50_000
+    static let logLineMachineLimit: Int = 1_000_000
     static var crashOnDebugLogLevels: Set<Log.Level> = []
     static var reportableLogLevels: Set<Log.Level> = [.error]
-    //public static var logQueue:
-    public static var logEntries: [Log] = []
     static let queue = DispatchQueue(label: "thread-safe-logger", attributes: .concurrent)
 
     public static func writeLogTo(fileUrl url: URL) throws {
@@ -30,7 +31,11 @@ public struct Logger {
         try logData.write(to: url)
     }
 
-    static func log(level: Log.Level, topic: Log.Topic, message: String) {
+    static func log(
+        level: Log.Level,
+        topic: Log.Topic,
+        message: String
+    ) {
         let log = Log(level: level, topic: topic, message: message)
         if shouldPrintLog(for: level) {
             print(log.output)
@@ -42,7 +47,7 @@ public struct Logger {
             // perform writes on data
             logEntries.append(log)
 
-            while logEntries.count > Self.maxLogLength {
+            while logEntries.count > Self.maxLogLines {
                 logEntries.removeFirst()
             }
         }
@@ -80,6 +85,11 @@ public struct Logger {
 
     public static func printing(logLevel: Log.Level, isEnabled enabled: Bool) {
         printLogLevelEnabled[logLevel] = enabled
+    }
+    
+    public static func set(maxLogLines: Int) {
+        assert(maxLogLines < logLineMachineLimit, "Cannot store a log larger than the machine limit")
+        self.maxLogLines = maxLogLines
     }
 
     private static var printLogLevelEnabled: [Log.Level: Bool] = [
