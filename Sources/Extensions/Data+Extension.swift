@@ -7,6 +7,11 @@
 
 import Foundation
 
+enum DataError: Error {
+    case encodingError(String)
+    case decodingError(String)
+}
+
 // MARK: - Initialisers
 public extension Data {
     init(_ dataDefinable: any DataDefinable) {
@@ -45,7 +50,7 @@ public extension Data {
         // Pull the bytes from the firmware data
         try self.withUnsafeBytes { rawBufferPointer in
             guard let unsafePointer = rawBufferPointer.bindMemory(to: UInt8.self).baseAddress else {
-                throw IntelliIQDataError.memoryBindingError
+                throw DataError.decodingError("Memory binding failed")
             }
 
             let u8Buffer = UnsafeBufferPointer<UInt8>(start: unsafePointer + Int(byteOffset), count: Int(size))
@@ -83,7 +88,7 @@ public extension Data {
     func to<T>(at byteOffset: UInt64, as: T.Type) throws -> T {
         try self.withUnsafeBytes { rawBufferPointer in
             guard let unsafePointer = rawBufferPointer.bindMemory(to: UInt8.self).baseAddress else {
-                throw IntelliIQDataError.memoryBindingError
+                throw DataError.decodingError("Memory Binding Failed")
             }
 
             let bufferPointer = UnsafeBufferPointer<UInt8>(start: unsafePointer + Int(byteOffset), count: 1)
@@ -92,7 +97,7 @@ public extension Data {
             }
 
             guard let baseAddress = typePointer.baseAddress else {
-                throw IntelliIQDataError.memoryOffsetMismatch
+                throw DataError.decodingError("Memory Offset Mismatch")
             }
 
             return baseAddress.pointee
