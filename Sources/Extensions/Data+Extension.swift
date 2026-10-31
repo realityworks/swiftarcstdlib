@@ -123,3 +123,37 @@ public extension Data {
         [UInt8](self)
     }
 }
+
+// Chunk management
+
+extension Data {
+    func chunkCount(ofSize chunkSize: Int) -> Int {
+        guard chunkSize > 0 else {
+            return 0
+        }
+        
+        if count == 0 {
+            return 0
+        }
+        
+        let hasRemainder = (count % chunkSize) != 0
+        return (count / chunkSize) + (hasRemainder ? 1 : 0)
+    }
+    
+    func chunk(
+        atIndex index: Int,
+        ofChunksize chunkSize: Int
+    ) -> Data? {
+        guard (index * chunkSize) <= count else {
+            return nil
+        }
+        
+        let startIndex = index * chunkSize
+        var endIndex = ((index + 1) * chunkSize)
+        if endIndex > self.count {
+            endIndex = self.count
+        }
+        
+        return self.subdata(in: startIndex..<endIndex)
+    }
+}

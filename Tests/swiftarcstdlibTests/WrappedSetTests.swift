@@ -102,3 +102,4 @@ final class WrappedSetTests: XCTestCase {
         XCTAssertFalse(integerSetA.overlaps(integerSetB))
     }
 }
+
